@@ -5,9 +5,8 @@ import os
 from typing import List, Tuple, Dict, Any
 from pathlib import Path
 
-# Environment overrides for ChromaDB local Segment API
+# Disable Chroma telemetry
 os.environ["ANONYMIZED_TELEMETRY"] = "False"
-os.environ["CHROMA_API_IMPL"] = "chromadb.api.segment.SegmentAPI"
 
 # Override sqlite3 with pysqlite3 for Linux / Streamlit Cloud compatibility
 try:
@@ -58,22 +57,12 @@ class VectorStoreManager:
         self._init_vectorstore()
         
     def _init_vectorstore(self):
-        """Initializes ChromaDB client safely for both local and Streamlit Cloud environments."""
-        try:
-            import chromadb
-            client = chromadb.PersistentClient(path=self.vectorstore_dir)
-            self.vectorstore = Chroma(
-                client=client,
-                collection_name=COLLECTION_NAME,
-                embedding_function=self.embedding_fn
-            )
-        except Exception as e:
-            print(f"Chroma PersistentClient fallback due to: {e}")
-            self.vectorstore = Chroma(
-                collection_name=COLLECTION_NAME,
-                embedding_function=self.embedding_fn,
-                persist_directory=self.vectorstore_dir
-            )
+        """Initializes ChromaDB persistent client safely for Streamlit Cloud."""
+        self.vectorstore = Chroma(
+            collection_name=COLLECTION_NAME,
+            embedding_function=self.embedding_fn,
+            persist_directory=self.vectorstore_dir
+        )
             
         try:
             if self.vectorstore._collection.count() == 0:
@@ -159,22 +148,12 @@ class VectorStoreManager:
             return 0
             
         chunks = split_documents(docs)
-        try:
-            import chromadb
-            client = chromadb.PersistentClient(path=self.vectorstore_dir)
-            self.vectorstore = Chroma.from_documents(
-                documents=chunks,
-                embedding=self.embedding_fn,
-                collection_name=COLLECTION_NAME,
-                client=client
-            )
-        except Exception:
-            self.vectorstore = Chroma.from_documents(
-                documents=chunks,
-                embedding=self.embedding_fn,
-                collection_name=COLLECTION_NAME,
-                persist_directory=self.vectorstore_dir
-            )
+        self.vectorstore = Chroma.from_documents(
+            documents=chunks,
+            embedding=self.embedding_fn,
+            collection_name=COLLECTION_NAME,
+            persist_directory=self.vectorstore_dir
+        )
         return len(chunks)
 
     def rebuild_index(self):
