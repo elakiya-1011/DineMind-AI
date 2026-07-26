@@ -1,8 +1,16 @@
+import sys
 import shutil
 import time
 import os
 from typing import List, Tuple, Dict, Any
 from pathlib import Path
+
+# Override sqlite3 with pysqlite3 for Linux / Streamlit Cloud compatibility
+try:
+    __import__('pysqlite3')
+    sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+except Exception:
+    pass
 
 from langchain_core.documents import Document
 from langchain_community.vectorstores import Chroma
@@ -17,7 +25,7 @@ from backend.rag.splitter import split_documents
 from backend.utils.generator import generate_default_documents
 
 def get_embedding_function():
-    """Initializes lightweight OpenAI / OpenRouter embedding function for serverless cloud deployment."""
+    """Initializes lightweight OpenAI / OpenRouter embedding function for cloud deployment."""
     is_placeholder = "your_openrouter" in API_KEY or "your_openai" in API_KEY or len(API_KEY) < 15
     
     if not is_placeholder:
@@ -30,7 +38,6 @@ def get_embedding_function():
         except Exception as e:
             print(f"Warning: OpenAIEmbeddings init failed ({e})")
             
-    # Lightweight serverless fallback without 5GB PyTorch CUDA dependency
     try:
         from langchain_community.embeddings import FakeEmbeddings
         return FakeEmbeddings(size=1536)
@@ -47,12 +54,23 @@ class VectorStoreManager:
         self._init_vectorstore()
         
     def _init_vectorstore(self):
-        """Initializes ChromaDB persistent client and auto-indexes default files if empty."""
-        self.vectorstore = Chroma(
-            collection_name=COLLECTION_NAME,
-            embedding_function=self.embedding_fn,
-            persist_directory=self.vectorstore_dir
-        )
+        """Initializes ChromaDB client safely for both local and Streamlit Cloud environments."""
+        try:
+            import chromadb
+            client = chromadb.PersistentClient(path=self.vectorstore_dir)
+            self.vectorstore = Chroma(
+                client=client,
+                collection_name=COLLECTION_NAME,
+                embedding_function=self.embedding_fn
+            )
+        except Exception as e:
+            print(f"Chroma PersistentClient fallback due to: {e}")
+            self.vectorstore = Chroma(
+                collection_name=COLLECTION_NAME,
+                embedding_function=self.embedding_fn,
+                persist_directory=self.vectorstore_dir
+            )
+            
         try:
             if self.vectorstore._collection.count() == 0:
                 self.index_all_documents()
@@ -137,12 +155,22 @@ class VectorStoreManager:
             return 0
             
         chunks = split_documents(docs)
-        self.vectorstore = Chroma.from_documents(
-            documents=chunks,
-            embedding=self.embedding_fn,
-            collection_name=COLLECTION_NAME,
-            persist_directory=self.vectorstore_dir
-        )
+        try:
+            import chromadb
+            client = chromadb.PersistentClient(path=self.vectorstore_dir)
+            self.vectorstore = Chroma.from_documents(
+                documents=chunks,
+                embedding=self.embedding_fn,
+                collection_name=COLLECTION_NAME,
+                client=client
+            )
+        except Exception:
+            self.vectorstore = Chroma.from_documents(
+                documents=chunks,
+                embedding=self.embedding_fn,
+                collection_name=COLLECTION_NAME,
+                persist_directory=self.vectorstore_dir
+            )
         return len(chunks)
 
     def rebuild_index(self):
@@ -189,7 +217,6 @@ class VectorStoreManager:
     def replace_document(self, filename: str, new_file_buffer, new_filename: str = None) -> bool:
         """Replaces an existing document with a new upload buffer and updates vector index."""
         target_name = new_filename or filename
-        
         self.delete_document(filename)
         
         save_path = UPLOADS_DIR / target_name
