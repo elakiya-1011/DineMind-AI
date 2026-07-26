@@ -1,0 +1,202 @@
+/* DineMind AI - High Contrast Pastel Modern UI Styling System */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+html, body, [class*="css"] {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    color: #0F172A !important;
+}
+
+/* App Background */
+.stApp {
+    background: linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 50%, #EEF2FF 100%);
+}
+
+/* HIDE STREAMLIT DEFAULT TOP SIDEBAR NAV LIST */
+[data-testid="stSidebarNav"] {
+    display: none !important;
+}
+
+/* Sidebar High-Contrast Legibility Rules */
+section[data-testid="stSidebar"] {
+    background-color: #0F172A !important; /* Dark Slate Navy Sidebar */
+    border-right: 1px solid #1E293B !important;
+}
+
+section[data-testid="stSidebar"] h1, 
+section[data-testid="stSidebar"] h2, 
+section[data-testid="stSidebar"] h3, 
+section[data-testid="stSidebar"] h4,
+section[data-testid="stSidebar"] p,
+section[data-testid="stSidebar"] span,
+section[data-testid="stSidebar"] label,
+section[data-testid="stSidebar"] div {
+    color: #F8FAFC !important;
+}
+
+section[data-testid="stSidebar"] .caption {
+    color: #94A3B8 !important;
+}
+
+/* SIDEBAR BUTTONS - FIX WHITE-ON-WHITE TEXT VISIBILITY */
+section[data-testid="stSidebar"] .stButton > button {
+    background-color: #1E293B !important;
+    color: #FFFFFF !important;
+    border: 1.5px solid #475569 !important;
+    font-weight: 700 !important;
+    font-size: 0.95rem !important;
+    border-radius: 10px !important;
+    padding: 0.6rem 1rem !important;
+    width: 100% !important;
+}
+
+section[data-testid="stSidebar"] .stButton > button:hover {
+    background-color: #334155 !important;
+    color: #FFFFFF !important;
+    border-color: #94A3B8 !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Main Area Markdown Text */
+.stMarkdown p, .stMarkdown li, .stMarkdown span {
+    color: #1E293B !important;
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: #0F172A !important;
+    font-weight: 700 !important;
+    letter-spacing: -0.3px;
+}
+
+/* Custom Hero Header Banner */
+.hero-container {
+    background: linear-gradient(135deg, #E05638 0%, #D9381E 50%, #C02626 100%);
+    padding: 2.2rem 2rem;
+    border-radius: 20px;
+    color: #FFFFFF !important;
+    box-shadow: 0 10px 25px rgba(217, 56, 30, 0.25);
+    margin-bottom: 2rem;
+}
+
+.hero-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #FFFFFF !important;
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.5px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+.hero-subtitle {
+    font-size: 1.15rem;
+    font-weight: 500;
+    color: #F8FAFC !important;
+    opacity: 0.98;
+    margin-bottom: 0;
+}
+
+/* Pastel Cards - High Contrast */
+.dinemind-card {
+    background: #FFFFFF !important;
+    border: 1.5px solid #CBD5E1 !important;
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin-bottom: 1.25rem;
+    box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.dinemind-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(15, 23, 42, 0.12);
+    border-color: #94A3B8 !important;
+}
+
+.card-icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    display: inline-block;
+}
+
+.card-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #0F172A !important;
+    margin-bottom: 0.5rem;
+}
+
+.card-desc {
+    font-size: 0.98rem;
+    color: #334155 !important;
+    line-height: 1.6;
+    font-weight: 400;
+}
+
+/* Metric Cards */
+.metric-box {
+    background: #FFFFFF !important;
+    border: 1.5px solid #CBD5E1 !important;
+    border-radius: 14px;
+    padding: 1.2rem;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);
+}
+
+.metric-label {
+    font-size: 0.85rem;
+    color: #475569 !important;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.metric-val {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #D9381E !important;
+    margin: 0.2rem 0;
+}
+
+.metric-sub {
+    font-size: 0.8rem;
+    color: #64748B !important;
+    font-weight: 500;
+}
+
+/* Chat Messages */
+.stChatMessage {
+    border-radius: 16px !important;
+    padding: 1.2rem !important;
+    margin-bottom: 1rem !important;
+    border: 1px solid #E2E8F0 !important;
+    background-color: #FFFFFF !important;
+}
+
+/* Main Area Streamlit Buttons */
+.stApp .stButton > button {
+    border-radius: 12px !important;
+    font-weight: 700 !important;
+    transition: all 0.2s ease !important;
+    border: 1px solid #CBD5E1 !important;
+    padding: 0.5rem 1.25rem !important;
+    color: #0F172A !important;
+    background-color: #FFFFFF !important;
+}
+
+.stApp .stButton > button:hover {
+    transform: translateY(-1px);
+    background-color: #F8FAFC !important;
+    border-color: #94A3B8 !important;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
+}
+
+.stApp .stButton > button[kind="primary"] {
+    background: linear-gradient(135deg, #D9381E 0%, #C02626 100%) !important;
+    color: #FFFFFF !important;
+    border: none !important;
+}
+
+/* Hide Streamlit Header & Footer */
+#MainMenu {visibility: hidden;}
+footer {visibility: hidden;}

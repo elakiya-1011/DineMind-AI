@@ -1,0 +1,12 @@
+Dish Name,Category,Is Vegetarian,Is Vegan,Is Gluten Free,Contains Peanuts,Allergens
+Truffle Mushroom Bruschetta,Appetizer,Yes,No,No,No,"Gluten, Dairy"
+Crispy Calamari,Appetizer,No,No,No,No,"Seafood, Gluten"
+Roasted Tomato Soup,Appetizer,Yes,Yes,Yes,No,None
+Grilled Atlantic Salmon,Main Course,No,No,Yes,No,"Fish, Dairy"
+Margherita Pizza,Main Course,Yes,No,No,No,"Gluten, Dairy"
+Wild Mushroom Risotto,Main Course,Yes,No,Yes,No,Dairy
+Wagyu Beef Burger,Main Course,No,No,No,No,"Gluten, Dairy"
+Creamy Vegan Avocado Pasta,Main Course,Yes,Yes,No,No,Gluten
+Classic Tiramisu,Dessert,Yes,No,No,No,"Dairy, Eggs, Gluten"
+Molten Chocolate Lava Cake,Dessert,Yes,No,No,No,"Dairy, Eggs, Gluten"
+Vegan Mango Sorbet,Dessert,Yes,Yes,Yes,No,None

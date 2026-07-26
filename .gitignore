@@ -1,0 +1,23 @@
+# Python bytecode & cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Environment & Secret files
+.env
+venv/
+env/
+ENV/
+
+# ChromaDB & Local Persistence
+vectorstore/
+uploads/
+
+# IDE files
+.vscode/
+.idea/
+.DS_Store
+
+# Streamlit config
+.streamlit/secrets.toml
