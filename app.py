@@ -109,3 +109,10 @@ with c_col3:
 
 st.markdown("---")
 st.markdown("<div style='text-align: center; color: #475569; font-weight: 600; font-size: 0.9rem;'>Built with Streamlit • LangChain • ChromaDB • OpenAI</div>", unsafe_allow_html=True)
+
+# Top-level WSGI/ASGI application export required for Vercel Python Runtime
+def handler(environ, start_response):
+    start_response('200 OK', [('Content-Type', 'text/html; charset=utf-8')])
+    return [b"<h1>DineMind AI - Streamlit Web Application</h1><p>Please deploy on Streamlit Community Cloud (share.streamlit.io) for full interactive UI execution.</p>"]
+
+app = handler
