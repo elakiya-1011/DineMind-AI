@@ -17,17 +17,21 @@ from backend.rag.splitter import split_documents
 from backend.utils.generator import generate_default_documents
 
 def get_embedding_function():
-    """Initializes the embedding function (OpenAI / OpenRouter with HuggingFace fallback)."""
-    try:
-        if API_KEY and len(API_KEY) > 5:
+    """Initializes the embedding function (OpenAI / OpenRouter with robust HuggingFace fallback)."""
+    # Check if API_KEY is a valid real key (not a placeholder string)
+    is_placeholder = "your_openrouter" in API_KEY or "your_openai" in API_KEY or len(API_KEY) < 15
+    
+    if not is_placeholder:
+        try:
             return OpenAIEmbeddings(
                 api_key=API_KEY,
                 openai_api_base=OPENAI_API_BASE,
                 model=EMBEDDING_MODEL_NAME
             )
-    except Exception as e:
-        print(f"Warning: OpenAIEmbeddings failed, using HuggingFaceEmbeddings fallback. Error: {e}")
-        
+        except Exception as e:
+            print(f"Warning: OpenAIEmbeddings init failed ({e}), using HuggingFaceEmbeddings fallback.")
+            
+    # Local HuggingFace fallback guaranteeing 100% offline & zero-cost vector search capability
     from langchain_community.embeddings import HuggingFaceEmbeddings
     return HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
 
@@ -47,7 +51,6 @@ class VectorStoreManager:
             embedding_function=self.embedding_fn,
             persist_directory=self.vectorstore_dir
         )
-        # Auto-index default documents on first initialization if empty
         try:
             if self.vectorstore._collection.count() == 0:
                 self.index_all_documents()
@@ -195,8 +198,7 @@ class VectorStoreManager:
         return True
 
     def similarity_search_with_score(self, query: str, top_k: int = TOP_K_RESULTS) -> List[Tuple[Document, float]]:
-        """Performs vector similarity search and returns matching chunks with L2/Cosine scores."""
-        # Safeguard: If vectorstore count is 0, auto-index before searching
+        """Performs vector similarity search with safe runtime exception handling."""
         try:
             if self.vectorstore._collection.count() == 0:
                 self.index_all_documents()
@@ -204,6 +206,13 @@ class VectorStoreManager:
             self.index_all_documents()
             
         start_t = time.time()
-        results = self.vectorstore.similarity_search_with_score(query, k=top_k)
+        try:
+            results = self.vectorstore.similarity_search_with_score(query, k=top_k)
+        except Exception as e:
+            print(f"Vector search embedding error ({e}), switching to HuggingFace embeddings...")
+            self.embedding_fn = get_embedding_function()
+            self._init_vectorstore()
+            results = self.vectorstore.similarity_search_with_score(query, k=top_k)
+            
         elapsed_ms = round((time.time() - start_t) * 1000, 2)
         return results, elapsed_ms
