@@ -41,12 +41,18 @@ class VectorStoreManager:
         self._init_vectorstore()
         
     def _init_vectorstore(self):
-        """Initializes ChromaDB persistent client."""
+        """Initializes ChromaDB persistent client and auto-indexes default files if empty."""
         self.vectorstore = Chroma(
             collection_name=COLLECTION_NAME,
             embedding_function=self.embedding_fn,
             persist_directory=self.vectorstore_dir
         )
+        # Auto-index default documents on first initialization if empty
+        try:
+            if self.vectorstore._collection.count() == 0:
+                self.index_all_documents()
+        except Exception:
+            self.index_all_documents()
         
     def get_stats(self) -> dict:
         """Returns knowledge base overview statistics."""
@@ -179,20 +185,24 @@ class VectorStoreManager:
         """Replaces an existing document with a new upload buffer and updates vector index."""
         target_name = new_filename or filename
         
-        # Delete old file
         self.delete_document(filename)
         
-        # Save new file
         save_path = UPLOADS_DIR / target_name
         with open(save_path, "wb") as f:
             f.write(new_file_buffer.getbuffer())
             
-        # Add to index
         self.add_document(str(save_path))
         return True
 
     def similarity_search_with_score(self, query: str, top_k: int = TOP_K_RESULTS) -> List[Tuple[Document, float]]:
         """Performs vector similarity search and returns matching chunks with L2/Cosine scores."""
+        # Safeguard: If vectorstore count is 0, auto-index before searching
+        try:
+            if self.vectorstore._collection.count() == 0:
+                self.index_all_documents()
+        except Exception:
+            self.index_all_documents()
+            
         start_t = time.time()
         results = self.vectorstore.similarity_search_with_score(query, k=top_k)
         elapsed_ms = round((time.time() - start_t) * 1000, 2)

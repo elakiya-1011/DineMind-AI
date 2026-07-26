@@ -43,7 +43,7 @@ def generate_default_documents():
     menu_pdf = DOCUMENTS_DIR / "Menu.pdf"
     if not menu_pdf.exists():
         content = [
-            "<b>Appetizers:</b>",
+            "<b>Appetizers & Starters:</b>",
             "• Truffle Mushroom Bruschetta - $14.50 (Vegetarian)",
             "• Crispy Calamari with Lemon Aioli - $16.00",
             "• Roasted Tomato & Basil Soup - $10.00 (Vegan, Gluten-Free)",
@@ -53,14 +53,15 @@ def generate_default_documents():
             "• Wild Mushroom Risotto - $22.00 (Vegetarian, Gluten-Free option)",
             "• Wagyu Beef Burger with Truffle Fries - $24.00",
             "• Creamy Vegan Avocado Pasta - $20.00 (Vegan)",
-            "<br/><b>Desserts:</b>",
+            "<br/><b>Desserts & Sweets:</b>",
             "• Classic Tiramisu - $9.50 (Contains Dairy & Eggs)",
             "• Molten Chocolate Lava Cake with Vanilla Gelato - $11.00",
             "• Vegan Mango Sorbet - $8.00 (Vegan, Dairy-Free)",
-            "<br/><b>Beverages:</b>",
+            "<br/><b>Beverages & Refreshments:</b>",
             "• Freshly Squeezed Orange Juice - $5.50",
             "• Artisanal Cappuccino - $4.50",
-            "• Signature Mint Lime Cooler - $6.00"
+            "• Signature Mint Lime Cooler - $6.00",
+            "• Refreshing Coke / Soda - $3.00"
         ]
         create_pdf("Menu.pdf", "DineMind Bistro - Official Menu", content)
 
@@ -68,16 +69,22 @@ def generate_default_documents():
     faq_pdf = DOCUMENTS_DIR / "Restaurant_FAQ.pdf"
     if not faq_pdf.exists():
         content = [
-            "<b>Q: What are your operating hours?</b>",
-            "A: We are open Monday through Thursday from 11:00 AM to 10:00 PM, Friday and Saturday from 11:00 AM to 11:00 PM, and Sunday from 10:00 AM to 9:00 PM.",
-            "<br/><b>Q: Do you accept reservations?</b>",
-            "A: Yes, table reservations can be made online via our website or by calling us at (555) 123-4567 up to 30 days in advance.",
+            "<b>Q: Where are you located? What is your address?</b>",
+            "A: DineMind Bistro is conveniently located at 123 Gourmet Avenue, Culinary District, Downtown City, NY 10001 (opposite Central Park South).",
+            "<br/><b>Q: What are your operating hours and timings? Are you open today?</b>",
+            "A: We are open 7 days a week! Monday through Thursday from 11:00 AM to 10:00 PM, Friday and Saturday from 11:00 AM to 11:00 PM, and Sunday from 10:00 AM to 9:00 PM.",
             "<br/><b>Q: What payment methods do you accept?</b>",
-            "A: We accept Cash, Major Credit Cards (Visa, MasterCard, Amex), Apple Pay, Google Pay, and DineMind Gift Cards.",
-            "<br/><b>Q: Do you cater to dietary restrictions?</b>",
-            "A: Yes! We offer extensive Vegetarian, Vegan, Gluten-Free, and Nut-Free options clearly marked on our menu.",
-            "<br/><b>Q: Is parking available?</b>",
-            "A: Complimentary valet parking is available every evening starting from 5:00 PM."
+            "A: We accept Cash, Major Credit Cards (Visa, MasterCard, American Express, Discover), Debit Cards, Apple Pay, Google Pay, UPI, and DineMind Gift Cards.",
+            "<br/><b>Q: Do you accept table reservations?</b>",
+            "A: Yes! Table reservations can be booked online via our website or by calling our concierge at (555) 123-4567 up to 30 days in advance.",
+            "<br/><b>Q: Do you offer takeaway, online ordering, and home delivery?</b>",
+            "A: Yes, we offer takeaway, online ordering through our website/chat assistant, and home delivery within a 7-mile radius.",
+            "<br/><b>Q: Is parking and WiFi available?</b>",
+            "A: We provide complimentary valet parking starting at 5:00 PM daily, plus free high-speed WiFi for all dining guests.",
+            "<br/><b>Q: Can I host birthday parties, events, or private catering?</b>",
+            "A: Absolutely! We have a private party room for up to 50 guests and offer customized event catering packages. Contact events@dinemindbistro.com for bookings.",
+            "<br/><b>Q: What are your official contact details, social media, and website?</b>",
+            "A: Phone: (555) 123-4567 | Email: contact@dinemindbistro.com | Website: www.dinemindbistro.com | Instagram: @DineMindBistro"
         ]
         create_pdf("Restaurant_FAQ.pdf", "DineMind Bistro - Frequently Asked Questions", content)
 
@@ -87,12 +94,12 @@ def generate_default_documents():
         content = [
             "<b>Table Reservation & Cancellation Policy:</b>",
             "Reservations must be cancelled at least 2 hours prior to the reserved time slot. Parties larger than 6 require a 24-hour advance cancellation to avoid a $20 per-person fee.",
-            "<br/><b>Dress Code Policy:</b>",
-            "We maintain a Smart Casual dress code. Athletic wear, beachwear, and flip-flops are prohibited in the dining room.",
+            "<br/><b>Dress Code & Etiquette Policy:</b>",
+            "We maintain a Smart Casual dress code. Athletic wear, beachwear, and flip-flops are prohibited in the main dining room.",
             "<br/><b>Outside Food & Beverage Policy:</b>",
             "No outside food or drinks are allowed, except for celebratory birthday cakes, subject to a $15 corkage/plating fee.",
             "<br/><b>Pet Policy:</b>",
-            "Service animals are welcome indoors. Pets are strictly restricted to our outdoor patio area."
+            "Service animals are welcome indoors. Pets are strictly restricted to our outdoor garden patio area."
         ]
         create_pdf("Restaurant_Policies.pdf", "DineMind Bistro - General Policies", content)
 
@@ -102,12 +109,10 @@ def generate_default_documents():
         content = [
             "<b>Delivery Coverage & Timing:</b>",
             "We provide home delivery within a 7-mile radius of the restaurant. Estimated delivery time is 35-50 minutes.",
-            "<br/><b>Minimum Order & Fees:</b>",
-            "Minimum order amount for home delivery is $25.00. Delivery fee is $3.99 for orders under $50, and FREE for orders over $50.",
+            "<br/><b>Minimum Order & Delivery Fees:</b>",
+            "Minimum order amount for home delivery is $25.00. Delivery fee is $3.99 for orders under $50, and FREE delivery for orders over $50.",
             "<br/><b>Packaging & Food Safety:</b>",
-            "All delivery items are packed in eco-friendly tamper-evident thermal containers to maintain peak heat and freshness.",
-            "<br/><b>Delivery Partners:</b>",
-            "Orders can be placed directly on our app or via DoorDash, UberEats, and Grubhub."
+            "All delivery items are packed in eco-friendly tamper-evident thermal containers to maintain peak heat and freshness."
         ]
         create_pdf("Delivery_Policy.pdf", "DineMind Bistro - Delivery Policy", content)
 
@@ -115,7 +120,7 @@ def generate_default_documents():
     off_pdf = DOCUMENTS_DIR / "Offers.pdf"
     if not off_pdf.exists():
         content = [
-            "<b>Active Promotional Offers & Discounts:</b>",
+            "<b>Active Promotional Offers, Discounts & Coupons:</b>",
             "1. <b>Happy Hour Special:</b> 30% OFF all appetizers and mocktails Monday to Thursday between 4:00 PM and 6:30 PM.",
             "2. <b>Weekend Brunch Bundle:</b> Free mimosa or specialty smoothie with any breakfast entree on Saturdays & Sundays.",
             "3. <b>First Order Discount:</b> Use promo code 'DINEMIND15' to get 15% OFF your first online delivery order.",
