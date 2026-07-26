@@ -5,6 +5,10 @@ import os
 from typing import List, Tuple, Dict, Any
 from pathlib import Path
 
+# Environment overrides for ChromaDB local Segment API
+os.environ["ANONYMIZED_TELEMETRY"] = "False"
+os.environ["CHROMA_API_IMPL"] = "chromadb.api.segment.SegmentAPI"
+
 # Override sqlite3 with pysqlite3 for Linux / Streamlit Cloud compatibility
 try:
     __import__('pysqlite3')

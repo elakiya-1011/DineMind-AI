@@ -2,6 +2,10 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 
+# Set ChromaDB local segment implementation overrides before imports
+os.environ["ANONYMIZED_TELEMETRY"] = "False"
+os.environ["CHROMA_API_IMPL"] = "chromadb.api.segment.SegmentAPI"
+
 # Load environment variables from .env if present
 load_dotenv()
 
