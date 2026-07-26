@@ -2,7 +2,10 @@
   "builds": [
     {
       "src": "app.py",
-      "use": "@vercel/python"
+      "use": "@vercel/python",
+      "config": {
+        "excludeFiles": "{node_modules,vectorstore,uploads,.venv,**/*.onnx,**/*.bin,**/onnxruntime/**,**/torch/**,**/nvidia/**}"
+      }
     }
   ],
   "routes": [
