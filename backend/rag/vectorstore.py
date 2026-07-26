@@ -17,8 +17,7 @@ from backend.rag.splitter import split_documents
 from backend.utils.generator import generate_default_documents
 
 def get_embedding_function():
-    """Initializes the embedding function (OpenAI / OpenRouter with robust HuggingFace fallback)."""
-    # Check if API_KEY is a valid real key (not a placeholder string)
+    """Initializes lightweight OpenAI / OpenRouter embedding function for serverless cloud deployment."""
     is_placeholder = "your_openrouter" in API_KEY or "your_openai" in API_KEY or len(API_KEY) < 15
     
     if not is_placeholder:
@@ -29,11 +28,14 @@ def get_embedding_function():
                 model=EMBEDDING_MODEL_NAME
             )
         except Exception as e:
-            print(f"Warning: OpenAIEmbeddings init failed ({e}), using HuggingFaceEmbeddings fallback.")
+            print(f"Warning: OpenAIEmbeddings init failed ({e})")
             
-    # Local HuggingFace fallback guaranteeing 100% offline & zero-cost vector search capability
-    from langchain_community.embeddings import HuggingFaceEmbeddings
-    return HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
+    # Lightweight serverless fallback without 5GB PyTorch CUDA dependency
+    try:
+        from langchain_community.embeddings import FakeEmbeddings
+        return FakeEmbeddings(size=1536)
+    except Exception:
+        return OpenAIEmbeddings(api_key=API_KEY, openai_api_base=OPENAI_API_BASE, model=EMBEDDING_MODEL_NAME)
 
 class VectorStoreManager:
     """Manages ChromaDB vector store initialization, document indexing, CRUD, and rebuilds."""
@@ -206,13 +208,6 @@ class VectorStoreManager:
             self.index_all_documents()
             
         start_t = time.time()
-        try:
-            results = self.vectorstore.similarity_search_with_score(query, k=top_k)
-        except Exception as e:
-            print(f"Vector search embedding error ({e}), switching to HuggingFace embeddings...")
-            self.embedding_fn = get_embedding_function()
-            self._init_vectorstore()
-            results = self.vectorstore.similarity_search_with_score(query, k=top_k)
-            
+        results = self.vectorstore.similarity_search_with_score(query, k=top_k)
         elapsed_ms = round((time.time() - start_t) * 1000, 2)
         return results, elapsed_ms

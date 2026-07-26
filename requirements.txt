@@ -6,4 +6,3 @@ chromadb>=0.4.22
 python-dotenv>=1.0.0
 reportlab>=4.0.0
 pypdf>=4.0.0
-sentence-transformers>=2.2.2
